@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="map" style="height: 800px;"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+        var map = L.map('map').setView([0, 0], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var marker = L.marker([0, 0]).addTo(map);
+
+        navigator.geolocation.getCurrentPosition(funciona, erro);
+        function funciona(pos) {
+            var la = pos.coords.latitude;
+            var lo = pos.coords.longitude;
+
+            marker.setLatLng([la, lo]); //COLOCA O MARCADOR NA LOCALIZAÇÃO DO NAVEGADOR
+
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(la, lo),  // Latitude e longitude capturada no navegador do usuário
+                    L.latLng(-23.5566516, -46.3136124) // Latitude e longitude de destino (por exemplo, Senai Suzano)
+                ]
+            }).addTo(map);
+        }
+
+        function erro() {
+            console.log('Não foi possível localizar');
+        }
+        
+
+    </script>
+</body>
+</html>
